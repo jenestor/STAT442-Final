@@ -1,0 +1,90 @@
+---
+title: "Final"
+author: "Jessica Nestor"
+format: 
+ html: 
+  embed-resources: true
+editor: visual
+---
+
+## Reading Data
+
+Note that all data for suicide is from death certificates
+
+This table shows what every column indicates and a reference as I make graphs.
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+Pulled an image to see what every column means/ represents
+
+```{r}
+#| echo: false
+knitr::include_graphics("death.png")
+```
+
+Reading data
+
+```{r}
+death <- read.csv("suicide_rates.csv")
+summary(death)
+```
+
+## Graphs
+
+```{r}
+ggplot(death, aes(x = YEAR, y = ESTIMATE , fill = STUB_NAME)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Suicide Deaths by Age per Year ",
+       y = "Suicide Deaths per 100K via Estimate") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(death, aes(x = ESTIMATE, y = STUB_LABEL , fill = AGE)) +
+  geom_bar(stat = "identity") +
+  labs(title = "", 
+      y = "Specific Pop. of Subgroup") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(death, aes(x = UNIT, y = ESTIMATE, fill = STUB_LABEL)) +
+  geom_bar(stat = "identity", width = 10) +
+  labs(title = "Specific Subgroup") +
+  theme_minimal() 
+```
+
+```{r}
+ggplot(death, aes(x = YEAR, y =ESTIMATE)) +
+  geom_point(color = "red", size = 3) +
+  labs(title = "Scatter Plot of ESTIMATE VIA per 100K", x = "YEAR", y = "ESTIMATE") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(death, aes(x = YEAR, y =STUB_LABEL_NUM)) +
+  geom_point(color = "blue", size = 3) +
+  labs(title = "Scatter Plot of STUB_LABEL_NUM", x = "YEAR", y = "STUB_LABEL_NUM") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(data=death, aes(x=YEAR, y=ESTIMATE, group=1)) +
+  geom_line()+
+  geom_point()
+```
+
+## Quantitative Analysis
+
+```{r}
+ggplot(death, aes(x = STUB_LABEL_NUM)) +
+  geom_histogram(binwidth = 0.5, fill = "blue", color = "black") +
+  labs(title = "Histogram of STUB_LABEL_NUM")
+```
+
+```{r}
+cor.test(death$YEAR_NUM,death$STUB_LABEL_NUM)
+```
